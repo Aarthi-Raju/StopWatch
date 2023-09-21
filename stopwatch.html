@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px black solid;
+            height: 97vh;
+            background-color: rgb(26, 26, 26);
+            color: white;
+        }
+
+        .time {
+            width: 1000px;
+            text-align: center;
+            font-size: 200px;
+            padding: 20px 50px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+            border-bottom: 5px black solid;
+        }
+
+        .stopwatch {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #secs,
+        #msecs,
+        #mins,
+        #hrs {
+            display: flex;
+            align-items: end;
+        }
+
+        #msecs {
+            font-size: 150px;
+            padding-bottom: 8px;
+        }
+
+        button {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        button:disabled{
+            background-color: white;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stopwatch" id="stopwatch">
+        <div class="time" id="time">
+            <div id="hrs"></div>
+            <div id="mins"></div>
+            <div id="secs">0s</div>&nbsp;
+            <div id="msecs">00</div>
+        </div>
+        <div class="buttons" id="buttons">
+            <button class="start" id="start" onclick="startWatch()">START</button>
+            <button class="pause" id="pause" onclick="pause()">PAUSE</button>
+            <button class="resume" id="resume" onclick="resume()">RESUME</button>
+            <button class="clear" id="clear" onclick="clr()">CLEAR</button>
+        </div>
+    </div>
+</body>
+<script>
+    var seconds = 0;
+    var minutes = 0;
+    var hours = 0;
+    var milliSeconds = 0;
+    function startWatch() {
+        document.getElementById("start").setAttribute('disabled','true');
+        document.getElementById("resume").setAttribute('disabled','disabled');
+        watch = setInterval(() => {
+            milliSeconds++;
+            if (milliSeconds == 100) {
+                seconds++;
+                milliSeconds = 0;
+                if (seconds == 60) {
+                    minutes++;
+                    seconds = 0;
+                    document.getElementById("mins").innerHTML = `${minutes}m&nbsp`;
+                    if (minutes == 60) {
+                        hours++;
+                        minutes = 0;
+                        document.getElementById("hrs").innerHTML = `${hours}h&nbsp`;
+                    }
+                }
+            }
+            document.getElementById("msecs").innerHTML = milliSeconds;
+            document.getElementById("secs").innerHTML = `${seconds}s `;
+        }, 10)
+    }
+    function pause() {
+        clearInterval(watch);
+        document.getElementById("pause").setAttribute('disabled','disabled');
+        document.getElementById("resume").removeAttribute('disabled','disabled');
+    }
+    function resume() {
+        startWatch();
+        document.getElementById("resume").setAttribute('disabled','disabled');
+        document.getElementById("pause").removeAttribute('disabled','disabled');
+
+    }
+    function clr() {
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        milliSeconds = 0;
+        clearInterval(watch);
+        document.getElementById("msecs").innerHTML = `${milliSeconds}0`
+        document.getElementById("secs").innerHTML = `${seconds}s&nbsp`;
+        document.getElementById("start").removeAttribute('disabled','disabled');
+        document.getElementById("resume").removeAttribute('disabled','disabled');
+    }
+</script>
+
+</html>
